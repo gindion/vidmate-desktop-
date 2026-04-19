@@ -1,0 +1,54 @@
+{
+  "name": "vidmate-desktop",
+  "version": "1.0.0",
+  "description": "Desktop media downloader — VidMate-style",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "prebuild": "node scripts/download-binaries.js",
+    "build:win": "npm run prebuild && electron-builder --win",
+    "build:mac": "npm run prebuild && electron-builder --mac",
+    "build:linux": "npm run prebuild && electron-builder --linux"
+  },
+  "dependencies": {
+    "axios": "^1.6.8"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.vidmate.desktop",
+    "productName": "VidMate Desktop",
+    "copyright": "Copyright © 2024",
+    "directories": { "buildResources": "assets", "output": "dist" },
+    "extraResources": [
+      { "from": "bin/${os}", "to": "bin", "filter": ["**/*"] }
+    ],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "assets/icon.ico",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "VidMate Desktop",
+      "include": "installer.nsh",
+      "deleteAppDataOnUninstall": false
+    },
+    "mac": {
+      "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }],
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "target": [{ "target": "AppImage", "arch": ["x64"] }],
+      "icon": "assets/icon.png",
+      "category": "Network"
+    }
+  }
+}
